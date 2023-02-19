@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+   organization:
+     build:
+       context: .
+     image: organization
+     container_name: organization
+     networks:
+       - mynet
+     ports:
+       - "8082:8082"
+     depends_on:
+       - db-organization
+     environment:
+       - SPRING_DATASOURCE_URL=jdbc:postgresql://db-organization:5432/db_organization
+       - SPRING_DATASOURCE_USERNAME=user
+       - SPRING_DATASOURCE_PASSWORD=1234
+
+   db-organization:
+     image: postgres
+     container_name: db_organization
+     networks:
+       - mynet
+     ports:
+       - "54321:5432"
+     environment:
+       - POSTGRES_USER=user
+       - POSTGRES_PASSWORD=1234
+       - POSTGRES_DB=db_organization
+
+networks:
+  mynet:
+    driver: bridge
